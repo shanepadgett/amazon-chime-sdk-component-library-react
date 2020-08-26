@@ -333,6 +333,15 @@ const videoGrid = {
   bgd: colors.greys.white
 };
 
+const chatMessage = {
+  incoming: {
+    bgd: colors.greys.grey10,
+  },
+  outgoing: {
+    bgd: colors.primary.lightest,
+  }
+};
+
 export const lightTheme = {
   name: 'Light Theme',
   buttons,
@@ -348,6 +357,7 @@ export const lightTheme = {
   roster,
   navbar,
   videoGrid,
+  chatMessage,
   ...defaultTheme
 };
 

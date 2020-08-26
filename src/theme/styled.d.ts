@@ -265,5 +265,14 @@ declare module 'styled-components' {
       headerBorder: string;
       wrapperBgd: string;
     };
+
+    chatMessage: {
+      outgoing: {
+        bgd: string;
+      },
+      incoming: {
+        bgd: string;
+      }
+    }
   }
 }
