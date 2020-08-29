@@ -13,6 +13,11 @@ export enum ContentActionType {
   RESET
 }
 
+export enum ContentShareType {
+  ScreenCapture,
+  VideoFile
+};
+
 type StartingAction = {
   type: ContentActionType.STARTING;
   payload?: any;
@@ -68,6 +73,7 @@ export type ContentShareState = {
   isLocalShareLoading: boolean;
   isLocalUserSharing: boolean;
   sharingAttendeeId: string | null;
+  contentType: ContentShareType | null;
 };
 
 export const initialState: ContentShareState = {
@@ -75,7 +81,9 @@ export const initialState: ContentShareState = {
   paused: false,
   isLocalUserSharing: false,
   isLocalShareLoading: false,
-  sharingAttendeeId: null
+  sharingAttendeeId: null,
+  contentType: null,
+  // contentshare url
 };
 
 export function reducer(
@@ -101,6 +109,7 @@ export function reducer(
       }
 
       return {
+        ...state,
         paused: false,
         tileId: tileState.tileId!,
         isLocalShareLoading: false,

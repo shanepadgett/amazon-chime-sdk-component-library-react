@@ -117,7 +117,7 @@ const ContentShareProvider: React.FC = ({ children }) => {
     return () => window.removeEventListener('unhandledrejection', cb);
   }, [isLocalShareLoading]);
 
-  const toggleContentShare = useCallback(async (): Promise<void> => {
+  const toggleContentShare = useCallback(async (stream?: MediaStream): Promise<void> => {
     if (!audioVideo) {
       return;
     }
@@ -125,7 +125,11 @@ const ContentShareProvider: React.FC = ({ children }) => {
     if (isLocalUserSharing || isLocalShareLoading) {
       audioVideo.stopContentShare();
     } else {
-      audioVideo.startContentShareFromScreenCapture();
+      // if (stream) {
+        // audioVideo.startContentShare(stream);
+      // }
+        audioVideo.startContentShareFromScreenCapture();
+      
       dispatch({ type: ContentActionType.STARTING });
     }
   }, [audioVideo, isLocalUserSharing, isLocalShareLoading]);
