@@ -8,7 +8,7 @@ import { InputWrapperProps } from './InputWrapper';
 const getPadding = (props: InputWrapperProps) => {
   const { sizing, leadingIcon } = props;
   return sizing === 'sm'
-    ? `0.125rem 1.75rem 0.125rem ${leadingIcon ? '1.25rem' : '0.125rem'}`
+    ? `0.0625rem 1.75rem 0.0625rem ${leadingIcon ? '1.25rem' : '0.125rem'}`
     : `0.375rem 1.75rem 0.375rem ${leadingIcon ? '1.25rem' : '0.375rem'}`;
 };
 
@@ -20,7 +20,8 @@ export const StyledInputWrapper = styled.span<InputWrapperProps>`
     width: 1rem;
     left: 0.1875rem;
     position: absolute;
-    top: ${props => (props.sizing === 'sm' ? '0.25rem' : '0.5rem')};
+    top: 50%;
+    transform: translateY(-48%);
   }
 
   > input {
@@ -91,20 +92,8 @@ export const StyledClear = styled.button<ClearProps>`
     fill: ${props => props.theme.inputs.clearBg};
   }
 
-  input:focus + &
-    display: block;
-  }
-
   &:active,
   &:focus {
     outline: none;
-  }
-
-  @media (pointer: fine) {
-    .ch-form-field-input:hover &,
-    input:hover + &,
-    &:hover {
-      display: block;
-    }
   }
 `;
