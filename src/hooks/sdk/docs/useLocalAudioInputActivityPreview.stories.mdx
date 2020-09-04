@@ -4,14 +4,17 @@
 
 The `useLocalAudioInputActivityPreview` hook applies scale transformation to the HTML element passed by reference showing the microphone activity from the currently selected audio input.
 
+Alternatively, you can pass a custom callback that receives a decimal value based on the current audio input. If you're using a custom callback, keep in mind that it can be called in high-frequency. We recommend keeping it out of your React rendering, or at minimum, in a leaf component.
+
 You can use this hook to develop a microphone activity preview component.
 
 ## Parameters
 
-This hook accepts two parameters:
+This hook accepts three parameters:
 
-- `elementRef` (Reference to HTML element)
-- `scaleDirection` defined by `TransformScaleDirection` type, it defaults to `horizontal`
+- `elementRef` - Reference to HTML element
+- `scaleDirection`: `TransformScaleDirection` - `horizontal`
+- `cb: (decimal: number) => void` - Optional callback to perform your own logic based on the current audio activity decimal
 
 `TransformScaleDirection` type
 
@@ -36,6 +39,7 @@ import { MeetingProvider, useLocalAudioInputActivityPreview } from 'amazon-chime
 const App = () => (
   <MeetingProvider>
     <MicrophoneActivityPreview />
+    <CustomMicActivityPreview />
   </MeetingProvider>
 );
 
@@ -44,6 +48,16 @@ const MicrophoneActivityPreview = () => {
   useLocalAudioInputActivityPreview(elementRef);
 
   return <div ref={elementRef}></div>;
+}
+
+const CustomMicActivityPreview = () => {
+  const callback = (decimal) => {
+    // Custom logic here
+  }
+
+  useLocalAudioInputActivityPreview(null, null, callback);
+
+  ...
 }
 ```
 

@@ -8,12 +8,20 @@ import { useAudioInputs } from '../../providers/DevicesProvider';
 
 type TransformScaleDirection = 'horizontal' | 'vertical';
 
-export const useLocalAudioInputActivityPreview = (elementRef: any, scaleDirection: TransformScaleDirection = 'horizontal') => {
+export const useLocalAudioInputActivityPreview = (
+  elementRef?: any,
+  scaleDirection: TransformScaleDirection | null | undefined = 'horizontal',
+  cb?: (decimal: number) => void
+) => {
   const audioVideo = useAudioVideo();
   const { selectedDevice } = useAudioInputs();
 
   useEffect(() => {
-    const analyserNode = audioVideo?.createAnalyserNodeForAudioInput();
+    if (!audioVideo) {
+      return;
+    }
+
+    const analyserNode = audioVideo.createAnalyserNodeForAudioInput();
 
     if (!analyserNode?.getByteTimeDomainData) {
       return;
@@ -22,6 +30,7 @@ export const useLocalAudioInputActivityPreview = (elementRef: any, scaleDirectio
     const data = new Uint8Array(analyserNode.fftSize);
     let frameIndex = 0;
     let isMounted = true;
+    let lastDecimal: number;
 
     function analyserNodeCallback() {
       if (!analyserNode) {
@@ -37,12 +46,22 @@ export const useLocalAudioInputActivityPreview = (elementRef: any, scaleDirectio
         }
         const decimal = (Math.log(lowest) - Math.log(max)) / Math.log(lowest);
 
-        if (elementRef.current && decimal >= 0) {
-          elementRef.current.style.transform = scaleDirection === 'horizontal' 
-            ? `scaleX(${decimal})`
-            : `scaleY(${decimal})`;
+        if (lastDecimal !== decimal) {
+          lastDecimal = decimal;
+
+          if (elementRef?.current) {
+            elementRef.current.style.transform =
+              scaleDirection === 'horizontal'
+                ? `scaleX(${decimal})`
+                : `scaleY(${decimal})`;
+          }
+
+          if (cb) {
+            cb(decimal);
+          }
         }
       }
+
       frameIndex = (frameIndex + 1) % 2;
 
       if (isMounted) {
@@ -55,7 +74,7 @@ export const useLocalAudioInputActivityPreview = (elementRef: any, scaleDirectio
     return () => {
       isMounted = false;
     };
-  }, [selectedDevice]);
+  }, [audioVideo, selectedDevice]);
 };
 
 export default useLocalAudioInputActivityPreview;
